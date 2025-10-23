@@ -17,11 +17,6 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @GetMapping(value = "/health")
-    public ResponseEntity<String> healthCheack(){
-        return new ResponseEntity<>("API is running!", HttpStatus.OK);
-    }
-
     @PostMapping
     public ResponseEntity<StudentDTO> createStudent(@RequestBody StudentDTO studentDTO){
         studentService.createStudent(studentDTO);
@@ -29,8 +24,13 @@ public class StudentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<StudentDTO>> getAllStudents(){
-        return new ResponseEntity<>(studentService.getAllStudents(), HttpStatus.OK);
+    public ResponseEntity<List<StudentDTO>> getAllStudents(
+            @RequestParam(required = false) List<String> addresses,
+            @RequestParam(required = false) List<Integer> ages,
+            @RequestParam(required = false) List<String> firstNames
+    ){
+        List<StudentDTO> studentDTOS = studentService.getAllStudents(addresses, ages, firstNames);
+        return new ResponseEntity<>(studentDTOS, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

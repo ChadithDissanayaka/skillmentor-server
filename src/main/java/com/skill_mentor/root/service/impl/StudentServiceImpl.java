@@ -27,9 +27,15 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<StudentDTO> getAllStudents() {
+    public List<StudentDTO> getAllStudents(List<String> addresses, List<Integer> ages, List<String> firstNames) {
         final List<StudentEntity> studentEntities = studentRepository.findAll();
-        return studentEntities.stream().map(StudentEntityDTOMapper::map).toList();
+        return studentEntities
+                .stream()
+                .filter(student-> addresses == null || addresses.contains(student.getAddress()))
+                .filter(student-> ages == null || ages.contains(student.getAge()))
+                .filter(student -> firstNames == null || firstNames.contains(student.getFirstName()))
+                .map(StudentEntityDTOMapper::map)
+                .toList();
     }
 
     @Override
