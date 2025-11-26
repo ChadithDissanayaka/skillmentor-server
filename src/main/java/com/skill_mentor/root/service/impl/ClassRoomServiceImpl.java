@@ -1,16 +1,18 @@
 package com.skill_mentor.root.service.impl;
 
 import com.skill_mentor.root.dto.ClassRoomDTO;
+import com.skill_mentor.root.dto.MentorDTO;
 import com.skill_mentor.root.entity.ClassRoomEntity;
 import com.skill_mentor.root.mapper.ClassRoomEntityDTOMapper;
+import com.skill_mentor.root.mapper.MentorEntityDTOMapper;
 import com.skill_mentor.root.repository.ClassRoomRepository;
 import com.skill_mentor.root.service.ClassRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ClassRoomServiceImpl implements ClassRoomService {
@@ -20,10 +22,18 @@ public class ClassRoomServiceImpl implements ClassRoomService {
 
     @Override
     public List<ClassRoomDTO> getAllClassRooms() {
-        List<ClassRoomEntity> classRooms = classRoomRepository.findAll();
-        return classRooms.stream()
-                .map(ClassRoomEntityDTOMapper::map)
-                .collect(Collectors.toList());
+        List<ClassRoomEntity> classRoomEntities = classRoomRepository.findAll();
+        List<ClassRoomDTO> classRoomDTOS = classRoomEntities.stream().map(
+                entity -> {
+                    ClassRoomDTO classRoomDTO = ClassRoomEntityDTOMapper.map(entity);
+                    if (!Objects.isNull(entity.getMentorEntity())) {
+                        MentorDTO mentorDTO = MentorEntityDTOMapper.map(entity.getMentorEntity());
+                        classRoomDTO.setMentorDTO(mentorDTO);
+                    }
+                    return classRoomDTO;
+                }
+        ).toList();
+        return classRoomDTOS;
     }
 
     @Override

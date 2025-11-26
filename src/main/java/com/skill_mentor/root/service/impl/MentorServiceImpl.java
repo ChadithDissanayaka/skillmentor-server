@@ -1,6 +1,7 @@
 package com.skill_mentor.root.service.impl;
 
 import com.skill_mentor.root.dto.MentorDTO;
+import com.skill_mentor.root.entity.ClassRoomEntity;
 import com.skill_mentor.root.entity.MentorEntity;
 import com.skill_mentor.root.mapper.MentorEntityDTOMapper;
 import com.skill_mentor.root.repository.ClassRoomRepository;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -24,8 +26,18 @@ public class MentorServiceImpl implements MentorService {
 
     @Override
     public MentorDTO createMentor(MentorDTO mentorDTO) {
-        final MentorEntity mentorEntity = MentorEntityDTOMapper.map(mentorDTO);
-        return MentorEntityDTOMapper.map(mentorRepository.save(mentorEntity));
+        MentorEntity savedEntity = null;
+        MentorEntity mentorEntity = MentorEntityDTOMapper.map(mentorDTO);
+        if(!Objects.isNull(mentorDTO.getClassRoomId())){
+            Optional <ClassRoomEntity> optionalClassRoomEntity = classRoomRepository.findById(mentorDTO.getClassRoomId());
+            if(optionalClassRoomEntity.isPresent()){
+                ClassRoomEntity classRoomEntity = optionalClassRoomEntity.get();
+                classRoomEntity.setMentorEntity(mentorEntity);
+                savedEntity = mentorRepository.save(mentorEntity);
+                classRoomRepository.save(classRoomEntity);
+            }
+        }
+        return MentorEntityDTOMapper.map(savedEntity);
     }
 
     @Override

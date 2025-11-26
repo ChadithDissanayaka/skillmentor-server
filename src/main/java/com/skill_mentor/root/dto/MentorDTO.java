@@ -18,5 +18,5 @@ public class MentorDTO {
     private String profession;
     private String subject;
     private String qualification;
-    private ClassRoomDTO classRoomDTO;
+    private Integer classRoomId;
 }

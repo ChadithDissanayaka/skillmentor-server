@@ -1,5 +1,6 @@
 package com.skill_mentor.root.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,13 @@ import lombok.NoArgsConstructor;
 
 public class ClassRoomDTO {
     private Integer classRoomId;
+
     private String title;
+
     private Double sessionFee;
+
     private Integer enrolledStudentCount;
-    private MentorDTO mentor;
+
+    @JsonProperty("mentor")
+    private MentorDTO mentorDTO;
 }

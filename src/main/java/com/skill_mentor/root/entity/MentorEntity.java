@@ -1,6 +1,5 @@
 package com.skill_mentor.root.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,9 +40,6 @@ public class MentorEntity {
 
     @Column(name = "qualification")
     private String qualification;
-
-    @OneToOne(mappedBy = "mentor", cascade = CascadeType.ALL)
-    private ClassRoomEntity classRoom;
 
 
 }

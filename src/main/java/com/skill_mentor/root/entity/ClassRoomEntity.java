@@ -1,6 +1,5 @@
 package com.skill_mentor.root.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,7 +27,7 @@ public class ClassRoomEntity {
     @Column(name = "enrolled_student_count")
     private Integer enrolledStudentCount;
 
-    @OneToOne
-    @JoinColumn(name = "mentor_id")
-    private MentorEntity mentor;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(referencedColumnName = "mentor_id")
+    private MentorEntity mentorEntity;
 }
