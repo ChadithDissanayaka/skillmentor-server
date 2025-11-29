@@ -41,5 +41,8 @@ public class MentorEntity {
     @Column(name = "qualification")
     private String qualification;
 
+    @ManyToOne()
+    @JoinColumn(name = "class_room_id", referencedColumnName = "class_room_id")
+    private ClassRoomEntity classRoomEntity;
 
 }

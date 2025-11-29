@@ -1,5 +1,6 @@
 package com.skill_mentor.root.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,5 +19,7 @@ public class MentorDTO {
     private String profession;
     private String subject;
     private String qualification;
-    private Integer classRoomId;
+    @JsonIgnore
+    private ClassRoomDTO classRoomDTO;
+    private Integer classroomId;
 }

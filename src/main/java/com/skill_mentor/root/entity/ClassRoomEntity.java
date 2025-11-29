@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,7 +30,6 @@ public class ClassRoomEntity {
     @Column(name = "enrolled_student_count")
     private Integer enrolledStudentCount;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(referencedColumnName = "mentor_id")
-    private MentorEntity mentorEntity;
+    @OneToMany(mappedBy = "classRoomEntity", fetch = FetchType.EAGER)
+    private List<MentorEntity> mentorEntities = new ArrayList<>();
 }

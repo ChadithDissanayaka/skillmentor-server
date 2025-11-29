@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ClassRoomServiceImpl implements ClassRoomService {
@@ -23,17 +23,16 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     @Override
     public List<ClassRoomDTO> getAllClassRooms() {
         List<ClassRoomEntity> classRoomEntities = classRoomRepository.findAll();
-        List<ClassRoomDTO> classRoomDTOS = classRoomEntities.stream().map(
-                entity -> {
+        return classRoomEntities.stream().map(
+                entity->{
                     ClassRoomDTO classRoomDTO = ClassRoomEntityDTOMapper.map(entity);
-                    if (!Objects.isNull(entity.getMentorEntity())) {
-                        MentorDTO mentorDTO = MentorEntityDTOMapper.map(entity.getMentorEntity());
-                        classRoomDTO.setMentorDTO(mentorDTO);
-                    }
+                    List<MentorDTO> mentorDTOS = entity.getMentorEntities().stream()
+                            .map(MentorEntityDTOMapper::map)
+                            .collect(Collectors.toList());
+                    classRoomDTO.setMentorDTOList(mentorDTOS);
                     return classRoomDTO;
                 }
-        ).toList();
-        return classRoomDTOS;
+        ).collect(Collectors.toList());
     }
 
     @Override

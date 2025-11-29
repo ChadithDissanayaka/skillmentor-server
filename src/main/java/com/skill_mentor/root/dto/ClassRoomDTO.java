@@ -1,9 +1,11 @@
 package com.skill_mentor.root.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,6 +20,6 @@ public class ClassRoomDTO {
 
     private Integer enrolledStudentCount;
 
-    @JsonProperty("mentor")
-    private MentorDTO mentorDTO;
+    private List<MentorDTO> mentorDTOList = new ArrayList<>();
+
 }
