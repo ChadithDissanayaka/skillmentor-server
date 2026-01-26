@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Service interface for managing students.
  */
-@Service
+
 public interface StudentService {
     /**
      * Creates a new student.
