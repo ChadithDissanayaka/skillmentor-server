@@ -1,4 +1,4 @@
-package com.skill_mentor.root.exception;
+package com.skillmentor.root.exception;
 
 public class StudentException extends RuntimeException{
     public StudentException(String message){

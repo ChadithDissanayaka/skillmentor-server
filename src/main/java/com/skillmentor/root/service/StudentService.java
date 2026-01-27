@@ -1,7 +1,6 @@
-package com.skill_mentor.root.service;
+package com.skillmentor.root.service;
 
-import com.skill_mentor.root.dto.StudentDTO;
-import org.springframework.stereotype.Service;
+import com.skillmentor.root.dto.StudentDTO;
 
 import java.util.List;
 

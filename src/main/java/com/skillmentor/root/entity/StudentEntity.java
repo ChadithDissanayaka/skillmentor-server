@@ -1,4 +1,4 @@
-package com.skill_mentor.root.entity;
+package com.skillmentor.root.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
