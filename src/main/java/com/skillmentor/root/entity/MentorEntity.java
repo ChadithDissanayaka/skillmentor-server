@@ -1,5 +1,6 @@
 package com.skillmentor.root.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
@@ -62,5 +63,9 @@ public class MentorEntity {
     @NotBlank(message = "Qualification must not be blank")
     @Column(name = "qualification", nullable = false)
     private String qualification;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "mentor", fetch = FetchType.LAZY)
+    private ClassRoomEntity classRoom;
 
 }

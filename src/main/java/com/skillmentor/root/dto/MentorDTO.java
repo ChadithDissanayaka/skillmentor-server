@@ -60,5 +60,8 @@ public class MentorDTO {
     @JsonProperty("qualification")
     private String qualification;
 
+    @NotNull(message = "Classroom ID must not be null")
+    @JsonProperty("class_room_id")
+    private Integer classRoomId;
 
 }

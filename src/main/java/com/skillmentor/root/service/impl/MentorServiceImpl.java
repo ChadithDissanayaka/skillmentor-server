@@ -1,9 +1,11 @@
 package com.skillmentor.root.service.impl;
 
 import com.skillmentor.root.dto.MentorDTO;
+import com.skillmentor.root.entity.ClassRoomEntity;
 import com.skillmentor.root.entity.MentorEntity;
 import com.skillmentor.root.exception.MentorException;
 import com.skillmentor.root.mapper.MentorEntityDTOMapper;
+import com.skillmentor.root.repository.ClassRoomRepository;
 import com.skillmentor.root.repository.MentorRepository;
 import com.skillmentor.root.service.MentorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +16,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class MentorServiceImpl implements MentorService {
-
     @Autowired
     private MentorRepository mentorRepository;
+    @Autowired
+    private ClassRoomRepository classRoomRepository;
 
     public MentorServiceImpl() {
     }
@@ -24,6 +27,14 @@ public class MentorServiceImpl implements MentorService {
     @Override
     public MentorDTO createMentor(MentorDTO mentorDTO) throws MentorException {
         final MentorEntity mentorEntity = MentorEntityDTOMapper.map(mentorDTO);
+        if (mentorDTO.getClassRoomId() != null) {
+            final ClassRoomEntity classRoomEntity = classRoomRepository.findById(mentorDTO.getClassRoomId())
+                    .orElseThrow(() -> new MentorException("Classroom not found with ID: " + mentorDTO.getClassRoomId()));
+            classRoomEntity.setMentor(mentorEntity);
+            final MentorEntity savedMentor = mentorRepository.save(mentorEntity);
+            classRoomRepository.save(classRoomEntity);
+            return MentorEntityDTOMapper.map(savedMentor);
+        }
         final MentorEntity savedEntity = mentorRepository.save(mentorEntity);
         return MentorEntityDTOMapper.map(savedEntity);
     }
