@@ -21,7 +21,6 @@ public class MentorEntity {
     @Column(name = "mentor_id")
     private Integer mentorId;
 
-
     @NotBlank(message = "First name must not be blank")
     @Column(name = "first_name", nullable = false)
     private String firstName;
