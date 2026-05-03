@@ -1,7 +1,7 @@
-package com.skill_mentor.root.controller;
+package com.skillmentor.root.controller;
 
-import com.skill_mentor.root.dto.StudentDTO;
-import com.skill_mentor.root.service.StudentService;
+import com.skillmentor.root.dto.StudentDTO;
+import com.skillmentor.root.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

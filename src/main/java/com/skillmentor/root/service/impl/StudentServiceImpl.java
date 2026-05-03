@@ -1,10 +1,10 @@
-package com.skill_mentor.root.service.impl;
+package com.skillmentor.root.service.impl;
 
-import com.skill_mentor.root.dto.StudentDTO;
-import com.skill_mentor.root.entity.StudentEntity;
-import com.skill_mentor.root.mapper.StudentEntityDTOMapper;
-import com.skill_mentor.root.repository.StudentRepository;
-import com.skill_mentor.root.service.StudentService;
+import com.skillmentor.root.dto.StudentDTO;
+import com.skillmentor.root.entity.StudentEntity;
+import com.skillmentor.root.mapper.StudentEntityDTOMapper;
+import com.skillmentor.root.repository.StudentRepository;
+import com.skillmentor.root.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
