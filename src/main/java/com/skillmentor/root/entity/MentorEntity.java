@@ -8,6 +8,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -66,5 +69,8 @@ public class MentorEntity {
     @JsonIgnore
     @OneToOne(mappedBy = "mentor", fetch = FetchType.LAZY)
     private ClassRoomEntity classRoom;
+
+    @OneToMany(mappedBy = "mentorEntity", fetch = FetchType.EAGER)
+    private List<SessionEntity> sessionEntityList = new ArrayList<>();
 
 }
