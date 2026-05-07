@@ -10,9 +10,10 @@ import com.skillmentor.root.repository.LiteSessionRepository;
 import com.skillmentor.root.repository.SessionRepository;
 import com.skillmentor.root.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class SessionServiceImp implements SessionService {
     @Autowired
     private SessionRepository sessionRepository;
