@@ -5,5 +5,10 @@ public class ClassRoomException extends RuntimeException{
         super(message, throwable);
     }
 
+    public ClassRoomException(String message){
+        super(message);
+    }
+
+    public ClassRoomException(){}
 }
 
