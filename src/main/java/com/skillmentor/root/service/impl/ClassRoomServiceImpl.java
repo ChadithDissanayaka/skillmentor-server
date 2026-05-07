@@ -23,7 +23,7 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     public List<ClassRoomDTO> getAllClassRooms() {
         final List<ClassRoomEntity> classRoomEntities = classRoomRepository.findAll();
         return classRoomEntities.stream().map(
-                entity -> {
+                entity->{
                     final ClassRoomDTO classRoomDTO = ClassRoomEntityDTOMapper.map(entity);
                     if (entity.getMentor() != null) {
                         final MentorDTO mentorDTO = MentorEntityDTOMapper.map(entity.getMentor());
@@ -40,15 +40,7 @@ public class ClassRoomServiceImpl implements ClassRoomService {
         if (classRoomEntity.isEmpty()) {
             throw new ClassRoomException("ClassRoom not found");
         }
-
-        final ClassRoomEntity entity = classRoomEntity.get();
-        final ClassRoomDTO classRoomDTO = ClassRoomEntityDTOMapper.map(entity);
-        if (entity.getMentor() != null) {
-            final MentorDTO mentorDTO = MentorEntityDTOMapper.map(entity.getMentor());
-            classRoomDTO.setMentorDTO(mentorDTO);
-        }
-
-        return classRoomDTO;
+        return ClassRoomEntityDTOMapper.map(classRoomEntity.get());
     }
 
     @Override

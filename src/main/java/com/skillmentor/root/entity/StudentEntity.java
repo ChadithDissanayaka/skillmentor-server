@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -45,5 +48,8 @@ public class StudentEntity {
     @Min(value = 1, message = "Age must be at least 1")
     @Column(name = "age", nullable = false)
     private Integer age;
+
+    @OneToMany(mappedBy = "studentEntity", fetch = FetchType.EAGER)
+    private List<SessionEntity> sessionEntityList = new ArrayList<>();
 
 }
