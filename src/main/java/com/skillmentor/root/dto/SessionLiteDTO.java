@@ -15,6 +15,7 @@ public class SessionLiteDTO {
     private Integer studentId;
     private Integer classRoomId;
     private Integer mentorId;
+    private String topic;
     private Instant startTime;
     private Instant endTime;
 

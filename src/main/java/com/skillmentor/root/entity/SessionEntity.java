@@ -36,6 +36,9 @@ public class SessionEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "mentor_id", referencedColumnName = "mentor_id")
     private MentorEntity mentorEntity;
+    
+    @Column(name = "topic")
+    private String topic;
 
     @Column(name ="start_time")
     private Instant startTime;

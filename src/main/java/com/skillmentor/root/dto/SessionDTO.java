@@ -15,6 +15,7 @@ public class SessionDTO {
     private StudentDTO studentDTO;
     private ClassRoomDTO classRoomDTO;
     private MentorDTO mentorDTO;
+    private String topic;
     private Instant startTime;
     private Instant endTime;
 }
