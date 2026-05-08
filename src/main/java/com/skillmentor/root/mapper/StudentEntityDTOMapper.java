@@ -4,8 +4,7 @@ import com.skillmentor.root.dto.StudentDTO;
 import com.skillmentor.root.entity.StudentEntity;
 
 public class StudentEntityDTOMapper {
-
-    public static StudentDTO map(StudentEntity studentEntity){
+    public static StudentDTO map(StudentEntity studentEntity) {
         StudentDTO studentDTO = new StudentDTO();
         studentDTO.setStudentId(studentEntity.getStudentId());
         studentDTO.setFirstName(studentEntity.getFirstName());
@@ -16,7 +15,8 @@ public class StudentEntityDTOMapper {
         studentDTO.setAge(studentEntity.getAge());
         return studentDTO;
     }
-    public static StudentEntity map(StudentDTO studentDTO){
+
+    public static StudentEntity map(StudentDTO studentDTO) {
         StudentEntity studentEntity = new StudentEntity();
         studentEntity.setStudentId(studentDTO.getStudentId());
         studentEntity.setFirstName(studentDTO.getFirstName());

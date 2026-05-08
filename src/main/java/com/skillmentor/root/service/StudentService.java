@@ -1,14 +1,17 @@
 package com.skillmentor.root.service;
 
 import com.skillmentor.root.dto.StudentDTO;
+import com.skillmentor.root.exception.StudentException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Service interface for managing students.
  */
-
+@Service
 public interface StudentService {
+
     /**
      * Creates a new student.
      *
@@ -31,7 +34,7 @@ public interface StudentService {
      * @param id the ID of the student to retrieve
      * @return a StudentDTO object representing the student
      */
-    StudentDTO getStudentById(Integer id);
+    StudentDTO findStudentById(Integer id);
 
     /**
      * Updates an existing student's details.

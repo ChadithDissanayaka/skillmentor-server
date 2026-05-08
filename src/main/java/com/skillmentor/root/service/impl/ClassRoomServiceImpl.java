@@ -3,7 +3,6 @@ package com.skillmentor.root.service.impl;
 import com.skillmentor.root.dto.ClassRoomDTO;
 import com.skillmentor.root.dto.MentorDTO;
 import com.skillmentor.root.entity.ClassRoomEntity;
-import com.skillmentor.root.exception.ClassRoomException;
 import com.skillmentor.root.mapper.ClassRoomEntityDTOMapper;
 import com.skillmentor.root.mapper.MentorEntityDTOMapper;
 import com.skillmentor.root.repository.ClassRoomRepository;
@@ -38,7 +37,7 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     public ClassRoomDTO findClassRoomById(Integer id) {
         final Optional<ClassRoomEntity> classRoomEntity = classRoomRepository.findById(id);
         if (classRoomEntity.isEmpty()) {
-            throw new ClassRoomException("ClassRoom not found");
+            throw new RuntimeException("ClassRoom not found");
         }
         return ClassRoomEntityDTOMapper.map(classRoomEntity.get());
     }
@@ -47,7 +46,7 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     public ClassRoomDTO deleteClassRoomById(Integer id) {
         final Optional<ClassRoomEntity> classRoomEntity = classRoomRepository.findById(id);
         if (classRoomEntity.isEmpty()) {
-            throw new ClassRoomException("ClassRoom not found");
+            throw new RuntimeException("ClassRoom not found");
         }
         classRoomRepository.deleteById(id);
         return ClassRoomEntityDTOMapper.map(classRoomEntity.get());
@@ -57,7 +56,7 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     public ClassRoomDTO updateClassRoom(ClassRoomDTO classRoomDTO) {
         Optional<ClassRoomEntity> classRoomEntity = classRoomRepository.findById(classRoomDTO.getClassRoomId());
         if (classRoomEntity.isEmpty()) {
-            throw new ClassRoomException("ClassRoom not found");
+            throw new RuntimeException("ClassRoom not found");
         }
         final ClassRoomEntity updatedEntity = classRoomEntity.get();
         updatedEntity.setTitle(classRoomDTO.getTitle());

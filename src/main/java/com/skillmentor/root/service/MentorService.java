@@ -33,7 +33,6 @@ public interface MentorService {
      */
     MentorDTO findMentorById(Integer id) throws MentorException;
 
-
     /**
      * Updates an existing mentor's details.
      *
@@ -49,5 +48,4 @@ public interface MentorService {
      * @return a MentorDTO object representing the deleted mentor
      */
     MentorDTO deleteMentorById(Integer id) throws MentorException;
-
 }

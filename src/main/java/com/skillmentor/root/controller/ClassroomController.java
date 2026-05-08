@@ -1,62 +1,55 @@
 package com.skillmentor.root.controller;
 
+import com.skillmentor.root.common.Constants;
 import com.skillmentor.root.dto.ClassRoomDTO;
-import com.skillmentor.root.exception.ClassRoomException;
 import com.skillmentor.root.service.ClassRoomService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
 @RestController
-@RequestMapping("/classroom")
+@RequestMapping(value = "/academic")
 public class ClassroomController {
 
     @Autowired
-    private ClassRoomService classRoomService;
+    private ClassRoomService classroomService;
 
-    // CREATE classroom
-    @PostMapping
-    public ResponseEntity<ClassRoomDTO> createClassRoom(
-            @RequestBody ClassRoomDTO classRoomDTO
-    ) {
-        ClassRoomDTO savedClassRoom = classRoomService.createClassRoom(classRoomDTO);
-        return new ResponseEntity<>(savedClassRoom, HttpStatus.CREATED);
+    public ClassroomController() {
     }
 
-    // GET all classrooms
-    @GetMapping
-    public ResponseEntity<List<ClassRoomDTO>> getAllClassRooms() {
-        List<ClassRoomDTO> classRooms = classRoomService.getAllClassRooms();
-        return new ResponseEntity<>(classRooms, HttpStatus.OK);
+    @PostMapping(value = "/classroom", consumes = Constants.APPLICATION_JSON, produces = Constants.APPLICATION_JSON)
+    public ResponseEntity<ClassRoomDTO> createClassroom(@Valid @RequestBody ClassRoomDTO classroomDTO) {
+        final ClassRoomDTO savedDTO = classroomService.createClassRoom(classroomDTO);
+        return ResponseEntity.ok(savedDTO);
     }
 
-    // GET classroom by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<ClassRoomDTO> getClassRoomById(
-            @PathVariable Integer id
-    ) throws ClassRoomException {
-        ClassRoomDTO classRoom = classRoomService.findClassRoomById(id);
-        return new ResponseEntity<>(classRoom, HttpStatus.OK);
+    @GetMapping(value = "/classroom", produces = Constants.APPLICATION_JSON)
+    public ResponseEntity<List<ClassRoomDTO>> getAllClassrooms() {
+        final List<ClassRoomDTO> classroomDTOS = classroomService.getAllClassRooms();
+        return ResponseEntity.ok(classroomDTOS);
     }
 
-    // UPDATE classroom
-    @PutMapping
-    public ResponseEntity<ClassRoomDTO> updateClassRoom(
-            @RequestBody ClassRoomDTO classRoomDTO
-    ) throws ClassRoomException {
-        ClassRoomDTO updatedClassRoom = classRoomService.updateClassRoom(classRoomDTO);
-        return new ResponseEntity<>(updatedClassRoom, HttpStatus.OK);
+    @GetMapping(value = "/classroom/{id}", produces = Constants.APPLICATION_JSON)
+    public ResponseEntity<ClassRoomDTO> findClassroomById(@PathVariable @Min(value = 1, message = "Classroom ID must be positive") Integer id) {
+        final ClassRoomDTO classroom = classroomService.findClassRoomById(id);
+        return ResponseEntity.ok(classroom);
     }
 
-    // DELETE classroom
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ClassRoomDTO> deleteClassRoom(
-            @PathVariable Integer id
-    ) throws ClassRoomException {
-        ClassRoomDTO deletedClassRoom = classRoomService.deleteClassRoomById(id);
-        return new ResponseEntity<>(deletedClassRoom, HttpStatus.OK);
+    @PutMapping(value = "/classroom", consumes = Constants.APPLICATION_JSON, produces = Constants.APPLICATION_JSON)
+    public ResponseEntity<ClassRoomDTO> updateClassroom(@Valid @RequestBody ClassRoomDTO classroomDTO) {
+        final ClassRoomDTO classroom = classroomService.updateClassRoom(classroomDTO);
+        return ResponseEntity.ok(classroom);
+    }
+
+    @DeleteMapping(value = "/classroom/{id}", produces = Constants.APPLICATION_JSON)
+    public ResponseEntity<ClassRoomDTO> deleteClassroom(@PathVariable @Min(value = 1, message = "Classroom ID must be positive") Integer id) {
+        final ClassRoomDTO classroom = classroomService.deleteClassRoomById(id);
+        return ResponseEntity.ok(classroom);
     }
 }

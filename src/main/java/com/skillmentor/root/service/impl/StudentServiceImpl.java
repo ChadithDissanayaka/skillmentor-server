@@ -2,6 +2,7 @@ package com.skillmentor.root.service.impl;
 
 import com.skillmentor.root.dto.StudentDTO;
 import com.skillmentor.root.entity.StudentEntity;
+import com.skillmentor.root.exception.StudentException;
 import com.skillmentor.root.mapper.StudentEntityDTOMapper;
 import com.skillmentor.root.repository.StudentRepository;
 import com.skillmentor.root.service.StudentService;
@@ -9,25 +10,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StudentServiceImpl implements StudentService {
     @Autowired
-    private StudentRepository studentRepository;
+    StudentRepository studentRepository;
 
     @Override
-    public StudentDTO createStudent(StudentDTO studentDTO) {
-        if (studentRepository.findByEmail(studentDTO.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists: " + studentDTO.getEmail());
+    public StudentDTO createStudent(final StudentDTO studentDTO) {
+        if (studentDTO == null) {
+            throw new IllegalArgumentException("Student data must not be null.");
         }
         final StudentEntity studentEntity = StudentEntityDTOMapper.map(studentDTO);
-        final StudentEntity saveEntity = studentRepository.save(studentEntity);
-        return StudentEntityDTOMapper.map(saveEntity);
+        final StudentEntity savedEntity = studentRepository.save(studentEntity);
+        return StudentEntityDTOMapper.map(savedEntity);
     }
 
     @Override
-    public List<StudentDTO> getAllStudents(List<String> addresses, List<Integer> ages, List<String> firstNames) {
+    public List<StudentDTO> getAllStudents(final List<String> addresses, final List<Integer> ages, final List<String> firstNames) {
         final List<StudentEntity> studentEntities = studentRepository.findAll();
         return studentEntities
                 .stream()
@@ -39,32 +39,33 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentDTO getStudentById(Integer id) {
-        Optional <StudentEntity> studentEntity = studentRepository.findById(id);
-        return studentEntity.map(StudentEntityDTOMapper::map).orElse(null);
+    public StudentDTO findStudentById(final Integer id){
+        return studentRepository.findById(id)
+                .map(StudentEntityDTOMapper::map)
+                .orElseThrow(() -> new StudentException("Student not found with ID: " + id, null));
     }
 
     @Override
-    public StudentDTO updateStudentById(StudentDTO studentDTO) {
-        StudentEntity studentEntity = studentRepository.findById(studentDTO.getStudentId()).orElse(null);
-        if (studentEntity != null) {
-            studentEntity.setFirstName(studentDTO.getFirstName());
-            studentEntity.setLastName(studentDTO.getLastName());
-            studentEntity.setEmail(studentDTO.getEmail());
-            studentEntity.setPhoneNumber(studentDTO.getPhoneNumber());
-            studentEntity.setAddress(studentDTO.getAddress());
-            studentEntity.setAge(studentDTO.getAge());
-            StudentEntity updatedEntity = studentRepository.save(studentEntity);
-            return StudentEntityDTOMapper.map(updatedEntity);
+    public StudentDTO updateStudentById(final StudentDTO studentDTO){
+        if (studentDTO == null || studentDTO.getStudentId() == null) {
+            throw new IllegalArgumentException("Student ID must not be null for update.");
         }
-        return null;
+        final StudentEntity studentEntity = studentRepository.findById(studentDTO.getStudentId())
+                .orElseThrow(() -> new StudentException("Cannot update. Student not found with ID: " + studentDTO.getStudentId(), null));
+        studentEntity.setFirstName(studentDTO.getFirstName());
+        studentEntity.setLastName(studentDTO.getLastName());
+        studentEntity.setEmail(studentDTO.getEmail());
+        studentEntity.setPhoneNumber(studentDTO.getPhoneNumber());
+        studentEntity.setAddress(studentDTO.getAddress());
+        studentEntity.setAge(studentDTO.getAge());
+        return StudentEntityDTOMapper.map(studentRepository.save(studentEntity));
     }
 
     @Override
-    public StudentDTO deleteStudentById(Integer id) {
-        final StudentEntity studentEntity = studentRepository.findById(id).orElse(null);
-        studentRepository.deleteById(id);
-        assert studentEntity != null;
+    public StudentDTO deleteStudentById(final Integer id){
+        final StudentEntity studentEntity = studentRepository.findById(id)
+                .orElseThrow(() -> new StudentException("Cannot delete. Student not found with ID: " + id, null));
+        studentRepository.delete(studentEntity);
         return StudentEntityDTOMapper.map(studentEntity);
     }
 }
