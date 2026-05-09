@@ -1,6 +1,5 @@
 package com.skillmentor.root.mapper;
 
-
 import com.skillmentor.root.dto.SessionLiteDTO;
 import com.skillmentor.root.entity.LiteSessionEntity;
 
@@ -15,7 +14,6 @@ public class LiteSessionEntityDTOMapper {
         liteSessionEntity.setStudentId(sessionLiteDTO.getStudentId());
         liteSessionEntity.setClassRoomId(sessionLiteDTO.getClassRoomId());
         liteSessionEntity.setMentorId(sessionLiteDTO.getMentorId());
-        liteSessionEntity.setTopic(sessionLiteDTO.getTopic());
         liteSessionEntity.setTopic(sessionLiteDTO.getTopic());
         liteSessionEntity.setStartTime(sessionLiteDTO.getStartTime());
         liteSessionEntity.setEndTime(sessionLiteDTO.getEndTime());
