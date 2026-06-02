@@ -19,6 +19,7 @@ import java.util.List;
 @Slf4j
 @Service
 public class StudentServiceImpl implements StudentService {
+
     @Autowired
     StudentRepository studentRepository;
 
@@ -38,7 +39,7 @@ public class StudentServiceImpl implements StudentService {
         log.debug("Mapped StudentEntity: {}", studentEntity);
 
         final StudentEntity savedEntity = studentRepository.save(studentEntity);
-        log.info("Student created successfully with ID: {}", savedEntity.getStudentId());
+        log.info("Student created with ID: {}", savedEntity.getStudentId());
 
         return StudentEntityDTOMapper.map(savedEntity);
     }
@@ -60,7 +61,7 @@ public class StudentServiceImpl implements StudentService {
                 .map(StudentEntityDTOMapper::map)
                 .toList();
 
-        log.info("Returning {} student(s) after applying filters.", result.size());
+        log.info("Found {} students after filtering", result.size());
         return result;
     }
 
