@@ -16,7 +16,7 @@ import lombok.*;
 import java.time.Instant;
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"studentEntity", "classRoomEntity", "mentorEntity"})
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

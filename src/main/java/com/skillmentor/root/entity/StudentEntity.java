@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"sessionEntityList"})
 @Table(name = "student")
 @NoArgsConstructor
 @AllArgsConstructor
