@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 @Service
 public class MentorServiceImpl implements MentorService {
@@ -22,21 +22,23 @@ public class MentorServiceImpl implements MentorService {
     @Autowired
     private ClassRoomRepository classRoomRepository;
 
-    public MentorServiceImpl() {
-    }
-
     @Override
     public MentorDTO createMentor(MentorDTO mentorDTO) throws MentorException {
+        if (mentorDTO == null) {
+            throw new IllegalArgumentException("Mentor data must not be null.");
+        }
+
         final MentorEntity mentorEntity = MentorEntityDTOMapper.map(mentorDTO);
-        if (mentorDTO.getClassRoomId() != null) {
-            final ClassRoomEntity classRoomEntity = classRoomRepository.findById(mentorDTO.getClassRoomId())
-                    .orElseThrow(() -> new MentorException("Classroom not found with ID: " + mentorDTO.getClassRoomId()));
+        final Integer classRoomId = mentorDTO.getClassRoomId();
+        if (classRoomId != null) {
+            final ClassRoomEntity classRoomEntity = classRoomRepository.findById(classRoomId)
+                    .orElseThrow(() -> new MentorException("Classroom not found with ID: " + classRoomId));
             classRoomEntity.setMentor(mentorEntity);
-            final MentorEntity savedMentor = mentorRepository.save(mentorEntity);
+            final MentorEntity savedMentor = mentorRepository.save(Objects.requireNonNull(mentorEntity));
             classRoomRepository.save(classRoomEntity);
             return MentorEntityDTOMapper.map(savedMentor);
         }
-        final MentorEntity savedEntity = mentorRepository.save(mentorEntity);
+        final MentorEntity savedEntity = mentorRepository.save(Objects.requireNonNull(mentorEntity));
         return MentorEntityDTOMapper.map(savedEntity);
     }
 
@@ -46,11 +48,14 @@ public class MentorServiceImpl implements MentorService {
                 .filter(mentor -> firstNames == null || firstNames.isEmpty() || firstNames.contains(mentor.getFirstName()))
                 .filter(mentor -> subjects == null || subjects.isEmpty() || subjects.contains(mentor.getSubject()))
                 .map(MentorEntityDTOMapper::map)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public MentorDTO findMentorById(Integer id) throws MentorException {
+        if (id == null) {
+            throw new IllegalArgumentException("Mentor ID must not be null.");
+        }
         return mentorRepository.findById(id)
                 .map(MentorEntityDTOMapper::map)
                 .orElseThrow(() -> new MentorException("Mentor not found with ID: " + id));
@@ -58,8 +63,16 @@ public class MentorServiceImpl implements MentorService {
 
     @Override
     public MentorDTO updateMentorById(MentorDTO mentorDTO) throws MentorException {
-        final MentorEntity mentorEntity = mentorRepository.findById(mentorDTO.getMentorId())
-                .orElseThrow(() -> new MentorException("Cannot update. Mentor not found with ID: " + mentorDTO.getMentorId()));
+        if (mentorDTO == null) {
+            throw new IllegalArgumentException("Mentor data must not be null for update.");
+        }
+
+        final Integer mentorId = mentorDTO.getMentorId();
+        if (mentorId == null) {
+            throw new IllegalArgumentException("Mentor ID must not be null for update.");
+        }
+        final MentorEntity mentorEntity = mentorRepository.findById(mentorId)
+                .orElseThrow(() -> new MentorException("Cannot update. Mentor not found with ID: " + mentorId));
         mentorEntity.setFirstName(mentorDTO.getFirstName());
         mentorEntity.setLastName(mentorDTO.getLastName());
         mentorEntity.setEmail(mentorDTO.getEmail());
@@ -76,9 +89,12 @@ public class MentorServiceImpl implements MentorService {
 
     @Override
     public MentorDTO deleteMentorById(Integer id) throws MentorException {
+        if (id == null) {
+            throw new IllegalArgumentException("Mentor ID must not be null.");
+        }
         final MentorEntity mentorEntity = mentorRepository.findById(id)
                 .orElseThrow(() -> new MentorException("Cannot delete. Mentor not found with ID: " + id));
-        mentorRepository.deleteById(id);
+        mentorRepository.delete(Objects.requireNonNull(mentorEntity));
         return MentorEntityDTOMapper.map(mentorEntity);
     }
 }

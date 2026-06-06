@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -38,7 +39,7 @@ public class StudentServiceImpl implements StudentService {
         final StudentEntity studentEntity = StudentEntityDTOMapper.map(studentDTO);
         log.debug("Mapped StudentEntity: {}", studentEntity);
 
-        final StudentEntity savedEntity = studentRepository.save(studentEntity);
+        final StudentEntity savedEntity = studentRepository.save(Objects.requireNonNull(studentEntity));
         log.info("Student created with ID: {}", savedEntity.getStudentId());
 
         return StudentEntityDTOMapper.map(savedEntity);
@@ -71,6 +72,11 @@ public class StudentServiceImpl implements StudentService {
     public StudentDTO findStudentById(final Integer id) {
         log.info("Fetching student with ID: {}", id);
 
+        if (id == null) {
+            log.error("Failed to fetch student: ID is null.");
+            throw new IllegalArgumentException("Student ID must not be null.");
+        }
+
         return studentRepository.findById(id)
                 .map(entity -> {
                     log.debug("Student found: {}", entity);
@@ -90,16 +96,22 @@ public class StudentServiceImpl implements StudentService {
         log.info("Updating student...");
         log.debug("StudentDTO received for update: {}", studentDTO);
 
-        if (studentDTO == null || studentDTO.getStudentId() == null) {
-            log.error("Failed to update student: DTO or student ID is null.");
+        if (studentDTO == null) {
+            log.error("Failed to update student: DTO is null.");
+            throw new IllegalArgumentException("Student data must not be null for update.");
+        }
+
+        final Integer studentId = studentDTO.getStudentId();
+        if (studentId == null) {
+            log.error("Failed to update student: student ID is null.");
             throw new IllegalArgumentException("Student ID must not be null for update.");
         }
 
-        log.debug("Looking up student with ID: {}", studentDTO.getStudentId());
-        final StudentEntity studentEntity = studentRepository.findById(studentDTO.getStudentId())
+        log.debug("Looking up student with ID: {}", studentId);
+        final StudentEntity studentEntity = studentRepository.findById(studentId)
                 .orElseThrow(() -> {
-                    log.error("Cannot update. Student not found with ID: {}", studentDTO.getStudentId());
-                    return new StudentException("Cannot update. Student not found with ID: " + studentDTO.getStudentId(), null);
+                    log.error("Cannot update. Student not found with ID: {}", studentId);
+                    return new StudentException("Cannot update. Student not found with ID: " + studentId, null);
                 });
 
         studentEntity.setFirstName(studentDTO.getFirstName());
@@ -110,7 +122,7 @@ public class StudentServiceImpl implements StudentService {
         studentEntity.setAge(studentDTO.getAge());
         log.debug("Student fields updated in memory: {}", studentEntity);
 
-        final StudentDTO updatedDTO = StudentEntityDTOMapper.map(studentRepository.save(studentEntity));
+        final StudentDTO updatedDTO = StudentEntityDTOMapper.map(studentRepository.save(Objects.requireNonNull(studentEntity)));
         log.info("Student updated successfully with ID: {}", updatedDTO.getStudentId());
 
         return updatedDTO;
@@ -122,13 +134,18 @@ public class StudentServiceImpl implements StudentService {
     public StudentDTO deleteStudentById(final Integer id) {
         log.info("Deleting student with ID: {}", id);
 
+        if (id == null) {
+            log.error("Failed to delete student: ID is null.");
+            throw new IllegalArgumentException("Student ID must not be null.");
+        }
+
         final StudentEntity studentEntity = studentRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("Cannot delete. Student not found with ID: {}", id);
                     return new StudentException("Cannot delete. Student not found with ID: " + id, null);
                 });
 
-        studentRepository.delete(studentEntity);
+        studentRepository.delete(Objects.requireNonNull(studentEntity));
         log.info("Student deleted successfully with ID: {}", id);
         log.debug("Deleted student details: {}", studentEntity);
 
