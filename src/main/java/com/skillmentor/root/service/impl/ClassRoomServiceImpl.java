@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -36,6 +37,9 @@ public class ClassRoomServiceImpl implements ClassRoomService {
 
     @Override
     public ClassRoomDTO findClassRoomById(Integer id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ClassRoom ID must not be null.");
+        }
         final Optional<ClassRoomEntity> classRoomEntity = classRoomRepository.findById(id);
         if (classRoomEntity.isEmpty()) {
             throw new ClassRoomException("ClassRoom not found");
@@ -45,31 +49,44 @@ public class ClassRoomServiceImpl implements ClassRoomService {
 
     @Override
     public ClassRoomDTO deleteClassRoomById(Integer id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ClassRoom ID must not be null.");
+        }
         final Optional<ClassRoomEntity> classRoomEntity = classRoomRepository.findById(id);
         if (classRoomEntity.isEmpty()) {
             throw new ClassRoomException("ClassRoom not found");
         }
-        classRoomRepository.deleteById(id);
+        classRoomRepository.delete(Objects.requireNonNull(classRoomEntity.get()));
         return ClassRoomEntityDTOMapper.map(classRoomEntity.get());
     }
 
     @Override
     public ClassRoomDTO updateClassRoom(ClassRoomDTO classRoomDTO) {
-        Optional<ClassRoomEntity> classRoomEntity = classRoomRepository.findById(classRoomDTO.getClassRoomId());
+        if (classRoomDTO == null) {
+            throw new IllegalArgumentException("ClassRoom data must not be null.");
+        }
+        final Integer classRoomId = classRoomDTO.getClassRoomId();
+        if (classRoomId == null) {
+            throw new IllegalArgumentException("ClassRoom ID must not be null for update.");
+        }
+        Optional<ClassRoomEntity> classRoomEntity = classRoomRepository.findById(classRoomId);
         if (classRoomEntity.isEmpty()) {
             throw new ClassRoomException("ClassRoom not found");
         }
         final ClassRoomEntity updatedEntity = classRoomEntity.get();
         updatedEntity.setTitle(classRoomDTO.getTitle());
         updatedEntity.setEnrolledStudentCount(classRoomDTO.getEnrolledStudentCount());
-        final ClassRoomEntity savedEntity = classRoomRepository.save(updatedEntity);
+        final ClassRoomEntity savedEntity = classRoomRepository.save(Objects.requireNonNull(updatedEntity));
         return ClassRoomEntityDTOMapper.map(savedEntity);
     }
 
     @Override
     public ClassRoomDTO createClassRoom(ClassRoomDTO classRoomDTO) {
+        if (classRoomDTO == null) {
+            throw new IllegalArgumentException("ClassRoom data must not be null.");
+        }
         final ClassRoomEntity classRoomEntity = ClassRoomEntityDTOMapper.map(classRoomDTO);
-        final ClassRoomEntity savedEntity = classRoomRepository.save(classRoomEntity);
+        final ClassRoomEntity savedEntity = classRoomRepository.save(Objects.requireNonNull(classRoomEntity));
         return ClassRoomEntityDTOMapper.map(savedEntity);
     }
 }

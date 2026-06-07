@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 @Service
 public class SessionServiceImp implements SessionService {
 
@@ -34,7 +35,7 @@ public class SessionServiceImp implements SessionService {
             throw new IllegalArgumentException("Session data must not be null.");
         }
         LiteSessionEntity sessionEntity = LiteSessionEntityDTOMapper.map(sessionDTO);
-        LiteSessionEntity savedEntity = liteSessionRepository.save(sessionEntity);
+        LiteSessionEntity savedEntity = liteSessionRepository.save(Objects.requireNonNull(sessionEntity));
         return LiteSessionEntityDTOMapper.map(savedEntity);
     }
 
