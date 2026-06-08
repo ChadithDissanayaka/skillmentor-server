@@ -1,7 +1,6 @@
 package com.skillmentor.root.service;
 
 import com.skillmentor.root.dto.StudentDTO;
-import com.skillmentor.root.exception.StudentException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

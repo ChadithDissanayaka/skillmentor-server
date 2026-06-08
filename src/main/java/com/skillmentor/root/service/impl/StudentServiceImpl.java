@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -25,7 +26,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = {"studentCache", "allStudentsCache"}, allEntries = true)
+    //@CacheEvict(value = {"studentCache", "allStudentsCache"}, allEntries = true)
     public StudentDTO createStudent(final StudentDTO studentDTO) {
         log.info("Creating new student...");
         log.debug("StudentDTO received: {}", studentDTO);
@@ -38,7 +39,7 @@ public class StudentServiceImpl implements StudentService {
         final StudentEntity studentEntity = StudentEntityDTOMapper.map(studentDTO);
         log.debug("Mapped StudentEntity: {}", studentEntity);
 
-        final StudentEntity savedEntity = studentRepository.save(studentEntity);
+        final StudentEntity savedEntity = studentRepository.save(Objects.requireNonNull(studentEntity));
         log.info("Student created with ID: {}", savedEntity.getStudentId());
 
         return StudentEntityDTOMapper.map(savedEntity);
@@ -46,7 +47,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @Cacheable(value = "allStudentsCache", key = "'allStudents'")
+    //@Cacheable(value = "allStudentsCache", key = "'allStudents'")
     public List<StudentDTO> getAllStudents(final List<String> addresses, final List<Integer> ages, final List<String> firstNames) {
         log.info("Fetching all students with filters — addresses: {}, ages: {}, firstNames: {}", addresses, ages, firstNames);
 
@@ -67,9 +68,14 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @Cacheable(value = "studentCache", key = "#id")
+    //@Cacheable(value = "studentCache", key = "#id")
     public StudentDTO findStudentById(final Integer id) {
         log.info("Fetching student with ID: {}", id);
+
+        if (id == null) {
+            log.error("Failed to fetch student: ID is null.");
+            throw new IllegalArgumentException("Student ID must not be null.");
+        }
 
         return studentRepository.findById(id)
                 .map(entity -> {
@@ -84,22 +90,28 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CachePut(value = "studentCache", key = "#studentDTO.studentId")
-    @CacheEvict(value = "allStudentsCache", allEntries = true)
+    //@CachePut(value = "studentCache", key = "#studentDTO.studentId")
+    //@CacheEvict(value = "allStudentsCache", allEntries = true)
     public StudentDTO updateStudentById(final StudentDTO studentDTO) {
         log.info("Updating student...");
         log.debug("StudentDTO received for update: {}", studentDTO);
 
-        if (studentDTO == null || studentDTO.getStudentId() == null) {
-            log.error("Failed to update student: DTO or student ID is null.");
+        if (studentDTO == null) {
+            log.error("Failed to update student: DTO is null.");
+            throw new IllegalArgumentException("Student data must not be null for update.");
+        }
+
+        final Integer studentId = studentDTO.getStudentId();
+        if (studentId == null) {
+            log.error("Failed to update student: student ID is null.");
             throw new IllegalArgumentException("Student ID must not be null for update.");
         }
 
-        log.debug("Looking up student with ID: {}", studentDTO.getStudentId());
-        final StudentEntity studentEntity = studentRepository.findById(studentDTO.getStudentId())
+        log.debug("Looking up student with ID: {}", studentId);
+        final StudentEntity studentEntity = studentRepository.findById(studentId)
                 .orElseThrow(() -> {
-                    log.error("Cannot update. Student not found with ID: {}", studentDTO.getStudentId());
-                    return new StudentException("Cannot update. Student not found with ID: " + studentDTO.getStudentId(), null);
+                    log.error("Cannot update. Student not found with ID: {}", studentId);
+                    return new StudentException("Cannot update. Student not found with ID: " + studentId, null);
                 });
 
         studentEntity.setFirstName(studentDTO.getFirstName());
@@ -110,7 +122,7 @@ public class StudentServiceImpl implements StudentService {
         studentEntity.setAge(studentDTO.getAge());
         log.debug("Student fields updated in memory: {}", studentEntity);
 
-        final StudentDTO updatedDTO = StudentEntityDTOMapper.map(studentRepository.save(studentEntity));
+        final StudentDTO updatedDTO = StudentEntityDTOMapper.map(studentRepository.save(Objects.requireNonNull(studentEntity)));
         log.info("Student updated successfully with ID: {}", updatedDTO.getStudentId());
 
         return updatedDTO;
@@ -118,9 +130,14 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = {"studentCache", "allStudentsCache"}, key = "#id")
+    //@CacheEvict(value = {"studentCache", "allStudentsCache"}, key = "#id")
     public StudentDTO deleteStudentById(final Integer id) {
         log.info("Deleting student with ID: {}", id);
+
+        if (id == null) {
+            log.error("Failed to delete student: ID is null.");
+            throw new IllegalArgumentException("Student ID must not be null.");
+        }
 
         final StudentEntity studentEntity = studentRepository.findById(id)
                 .orElseThrow(() -> {
@@ -128,7 +145,7 @@ public class StudentServiceImpl implements StudentService {
                     return new StudentException("Cannot delete. Student not found with ID: " + id, null);
                 });
 
-        studentRepository.delete(studentEntity);
+        studentRepository.delete(Objects.requireNonNull(studentEntity));
         log.info("Student deleted successfully with ID: {}", id);
         log.debug("Deleted student details: {}", studentEntity);
 
