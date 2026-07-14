@@ -43,7 +43,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             List<String> roles;
             Object rawRoles = claims.get("role");
             if (rawRoles instanceof List<?> rawList) {
-                roles = rawList.stream().map(Object::toString).collect(Collectors.toList());
+                roles = rawList.stream()
+                        .filter(java.util.Objects::nonNull)
+                        .map(String::valueOf)
+                        .collect(Collectors.toList());
             } else if (rawRoles instanceof String singleRole) {
                 roles = List.of(singleRole);
             } else {
