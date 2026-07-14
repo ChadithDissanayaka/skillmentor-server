@@ -15,11 +15,11 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import java.time.Duration;
 import java.util.Objects;
 
-//@Configuration
+@Configuration
+@Profile("prod")
 public class RedisCacheConfig {
 
     @Bean
-    @Profile("prod")
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
