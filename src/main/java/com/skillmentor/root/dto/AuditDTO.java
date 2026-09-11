@@ -1,6 +1,5 @@
 package com.skillmentor.root.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,9 +12,10 @@ import java.time.Instant;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class AuditDTO{
+public class AuditDTO {
+
     private Integer sessionId;
+
     @NotNull(message = "Student ID must not be null")
     @JsonProperty("student_id")
     private Integer studentId;
@@ -43,7 +43,6 @@ public class AuditDTO{
     @NotNull(message = "Mentor ID must not be null")
     @JsonProperty("mentor_id")
     private Integer mentorId;
-
     @NotBlank(message = "Mentor first name must not be blank")
     @JsonProperty("mentor_first_name")
     private String mentorFirstName;
@@ -71,4 +70,5 @@ public class AuditDTO{
     @NotBlank(message = "Topic must not be blank")
     @JsonProperty("topic")
     private String topic;
+
 }

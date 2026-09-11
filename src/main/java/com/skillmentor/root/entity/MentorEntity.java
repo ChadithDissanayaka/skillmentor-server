@@ -1,6 +1,5 @@
 package com.skillmentor.root.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
@@ -23,6 +22,10 @@ public class MentorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "mentor_id")
     private Integer mentorId;
+
+    @NotBlank(message = "Clerk mentor ID must not be blank")
+    @Column(name = "clerk_mentor_id", nullable = false, unique = true)
+    private String clerkMentorId;
 
     @NotBlank(message = "First name must not be blank")
     @Column(name = "first_name", nullable = false)
@@ -66,9 +69,9 @@ public class MentorEntity {
     @Column(name = "qualification", nullable = false)
     private String qualification;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "mentor", fetch = FetchType.LAZY)
-    private ClassRoomEntity classRoom;
+    @NotNull(message = "Mentor image must not be null")
+    @Column(name = "mentor_image", nullable = false)
+    private String mentorImage;
 
     @OneToMany(mappedBy = "mentorEntity", fetch = FetchType.EAGER)
     private List<SessionEntity> sessionEntityList = new ArrayList<>();

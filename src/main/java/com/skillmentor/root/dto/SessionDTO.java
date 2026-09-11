@@ -1,16 +1,16 @@
 package com.skillmentor.root.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.skillmentor.root.common.Constants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 import java.time.Instant;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class SessionDTO {
@@ -40,4 +40,9 @@ public class SessionDTO {
     @NotNull(message = "End time must not be null")
     @JsonProperty("end_time")
     private Instant endTime;
+
+    @NotNull(message = "Session status must not be null")
+    @JsonProperty("session_status")
+    private Constants.SessionStatus sessionStatus;
+
 }

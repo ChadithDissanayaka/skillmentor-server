@@ -17,6 +17,7 @@ public class SessionDTOEntityMapper {
         sessionEntity.setTopic(sessionDTO.getTopic());
         sessionEntity.setStartTime(sessionDTO.getStartTime());
         sessionEntity.setEndTime(sessionDTO.getEndTime());
+        sessionEntity.setSessionStatus(sessionDTO.getSessionStatus());
         return sessionEntity;
     }
 
@@ -32,6 +33,7 @@ public class SessionDTOEntityMapper {
         sessionDTO.setTopic(sessionEntity.getTopic());
         sessionDTO.setStartTime(sessionEntity.getStartTime());
         sessionDTO.setEndTime(sessionEntity.getEndTime());
+        sessionDTO.setSessionStatus(sessionEntity.getSessionStatus());
         return sessionDTO;
     }
 }

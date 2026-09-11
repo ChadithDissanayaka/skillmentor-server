@@ -1,8 +1,8 @@
 package com.skillmentor.root.service;
 
 import com.skillmentor.root.dto.StudentDTO;
+import com.skillmentor.root.exception.StudentException;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 /**
@@ -36,6 +36,12 @@ public interface StudentService {
     StudentDTO findStudentById(Integer id);
 
     /**
+     * @param clerkId the clerk ID of the student to retrieve
+     * @return a StudentDTO object representing the student
+     */
+    StudentDTO findStudentByClerkId(String clerkId);
+
+    /**
      * Updates an existing student's details.
      *
      * @param studentDTO the data transfer object containing updated student details
@@ -50,4 +56,12 @@ public interface StudentService {
      * @return a StudentDTO object representing the deleted student
      */
     StudentDTO deleteStudentById(Integer id);
+
+    /**
+     * Deletes a student by their clerk ID.
+     *
+     * @param clerkId the clerk ID of the student to delete
+     * @return a StudentDTO object representing the deleted student
+     */
+    StudentDTO deleteStudentByClerkId(String clerkId) throws StudentException;
 }

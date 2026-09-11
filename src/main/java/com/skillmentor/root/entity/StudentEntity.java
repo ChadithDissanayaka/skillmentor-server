@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString(exclude = {"sessionEntityList"})
+@ToString(exclude = { "sessionEntityList" })
 @Table(name = "student")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,6 +22,10 @@ public class StudentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_id", unique = true)
     private Integer studentId;
+
+    @NotBlank(message = "Clerk student ID must not be blank")
+    @Column(name = "clerk_student_id", nullable = false, unique = true)
+    private String clerkStudentId;
 
     @NotBlank(message = "First name must not be blank")
     @Column(name = "first_name", nullable = false)

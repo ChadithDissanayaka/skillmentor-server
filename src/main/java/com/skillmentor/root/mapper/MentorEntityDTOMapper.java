@@ -7,6 +7,7 @@ public class MentorEntityDTOMapper {
     public static MentorDTO map(MentorEntity mentorEntity) {
         MentorDTO mentorDTO = new MentorDTO();
         mentorDTO.setMentorId(mentorEntity.getMentorId());
+        mentorDTO.setClerkMentorId(mentorEntity.getClerkMentorId());
         mentorDTO.setFirstName(mentorEntity.getFirstName());
         mentorDTO.setLastName(mentorEntity.getLastName());
         mentorDTO.setEmail(mentorEntity.getEmail());
@@ -16,6 +17,7 @@ public class MentorEntityDTOMapper {
         mentorDTO.setSessionFee(mentorEntity.getSessionFee());
         mentorDTO.setTitle(mentorEntity.getTitle());
         mentorDTO.setSubject(mentorEntity.getSubject());
+        mentorDTO.setMentorImage(mentorEntity.getMentorImage());
         mentorDTO.setQualification(mentorEntity.getQualification());
         return mentorDTO;
     }
@@ -23,6 +25,7 @@ public class MentorEntityDTOMapper {
     public static MentorEntity map(MentorDTO mentorDTO) {
         MentorEntity mentorEntity = new MentorEntity();
         mentorEntity.setMentorId(mentorDTO.getMentorId());
+        mentorEntity.setClerkMentorId(mentorDTO.getClerkMentorId());
         mentorEntity.setFirstName(mentorDTO.getFirstName());
         mentorEntity.setLastName(mentorDTO.getLastName());
         mentorEntity.setEmail(mentorDTO.getEmail());
@@ -32,6 +35,7 @@ public class MentorEntityDTOMapper {
         mentorEntity.setSessionFee(mentorDTO.getSessionFee());
         mentorEntity.setTitle(mentorDTO.getTitle());
         mentorEntity.setSubject(mentorDTO.getSubject());
+        mentorEntity.setMentorImage(mentorDTO.getMentorImage());
         mentorEntity.setQualification(mentorDTO.getQualification());
         return mentorEntity;
     }

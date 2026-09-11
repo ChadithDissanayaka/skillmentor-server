@@ -6,16 +6,21 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MentorDTO {
     @JsonProperty("mentor_id")
     private Integer mentorId;
+
+    @NotBlank(message = "Clerk mentor ID must not be blank")
+    @JsonProperty("clerk_mentor_id")
+    private String clerkMentorId;
 
     @NotBlank(message = "First name must not be blank")
     @JsonProperty("first_name")
@@ -59,8 +64,11 @@ public class MentorDTO {
     @JsonProperty("qualification")
     private String qualification;
 
+    @NotNull(message = "mentor_image must not be null")
+    @JsonProperty("mentor_image")
+    private String mentorImage;
+
     @NotNull(message = "Classroom ID must not be null")
     @JsonProperty("class_room_id")
     private Integer classRoomId;
-
 }

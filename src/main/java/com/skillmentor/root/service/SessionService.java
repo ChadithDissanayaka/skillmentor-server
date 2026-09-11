@@ -1,11 +1,8 @@
 package com.skillmentor.root.service;
 
-import com.skillmentor.root.dto.AuditDTO;
-import com.skillmentor.root.dto.PaymentDTO;
-import com.skillmentor.root.dto.SessionDTO;
-import com.skillmentor.root.dto.SessionLiteDTO;
+import com.skillmentor.root.common.Constants;
+import com.skillmentor.root.dto.*;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 /**
@@ -33,7 +30,8 @@ public interface SessionService {
 
     /**
      * Retrieves a list of session audit records.
-     * This typically includes detailed info about each session for reporting or auditing.
+     * This typically includes detailed info about each session for reporting or
+     * auditing.
      *
      * @return a list of session audit DTOs
      */
@@ -43,8 +41,19 @@ public interface SessionService {
      * Finds total mentor payments within a given date range.
      *
      * @param startDate the start date in ISO format (e.g., "2024-01-01")
-     * @param endDate the end date in ISO format (e.g., "2024-01-31")
+     * @param endDate   the end date in ISO format (e.g., "2024-01-31")
      * @return a list of payment DTOs showing mentor-wise totals
      */
     List<PaymentDTO> findMentorPayments(String startDate, String endDate);
+
+    List<SessionDTO> getAllStudentSessions(String studentClerkId);
+
+    /**
+     * Updates the status of an existing session
+     *
+     * @param sessionId     the ID of the session to update
+     * @param sessionStatus the new status to set
+     * @return the updated session
+     */
+    SessionDTO updateSessionStatus(Integer sessionId, Constants.SessionStatus sessionStatus);
 }

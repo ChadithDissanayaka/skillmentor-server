@@ -22,7 +22,7 @@ import java.util.Base64;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private static final String JWKS_URL = "https://leading-eel-41.clerk.accounts.dev/.well-known/jwks.json";
+    private static final String JWKS_URL = "https://verified-amoeba-6167.clerk.accounts.dev/.well-known/jwks.json";
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

@@ -45,7 +45,8 @@ public class MentorServiceImpl implements MentorService {
     @Override
     public List<MentorDTO> getAllMentors(List<String> firstNames, List<String> subjects) {
         return mentorRepository.findAll().stream()
-                .filter(mentor -> firstNames == null || firstNames.isEmpty() || firstNames.contains(mentor.getFirstName()))
+                .filter(mentor -> firstNames == null || firstNames.isEmpty()
+                        || firstNames.contains(mentor.getFirstName()))
                 .filter(mentor -> subjects == null || subjects.isEmpty() || subjects.contains(mentor.getSubject()))
                 .map(MentorEntityDTOMapper::map)
                 .toList();
@@ -95,6 +96,21 @@ public class MentorServiceImpl implements MentorService {
         final MentorEntity mentorEntity = mentorRepository.findById(id)
                 .orElseThrow(() -> new MentorException("Cannot delete. Mentor not found with ID: " + id));
         mentorRepository.delete(Objects.requireNonNull(mentorEntity));
+        return MentorEntityDTOMapper.map(mentorEntity);
+    }
+
+    @Override
+    public MentorDTO findMentorByClerkId(String clerkId) throws MentorException {
+        return mentorRepository.findByClerkMentorId(clerkId)
+                .map(MentorEntityDTOMapper::map)
+                .orElseThrow(() -> new MentorException("Mentor not found with Clerk ID: " + clerkId));
+    }
+
+    @Override
+    public MentorDTO deleteMentorByClerkId(String clerkId) throws MentorException {
+        final MentorEntity mentorEntity = mentorRepository.findByClerkMentorId(clerkId)
+                .orElseThrow(() -> new MentorException("Cannot delete. Mentor not found with Clerk ID: " + clerkId));
+        mentorRepository.delete(mentorEntity);
         return MentorEntityDTOMapper.map(mentorEntity);
     }
 }

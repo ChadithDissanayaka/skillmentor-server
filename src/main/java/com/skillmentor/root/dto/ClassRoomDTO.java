@@ -23,7 +23,11 @@ public class ClassRoomDTO {
     @NotNull(message = "Enrolled student count must not be null")
     @JsonProperty("enrolled_student_count")
     private Integer enrolledStudentCount;
-    
+
+    @NotNull(message = "class_image must not be null")
+    @JsonProperty("class_image")
+    private String classImage;
+
     @JsonProperty("mentor")
     private MentorDTO mentorDTO;
 }

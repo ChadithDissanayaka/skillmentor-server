@@ -14,10 +14,13 @@ import com.skillmentor.root.repository.SessionRepository;
 import com.skillmentor.root.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.skillmentor.root.common.Constants;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+
 @Service
 public class SessionServiceImp implements SessionService {
 
@@ -27,7 +30,8 @@ public class SessionServiceImp implements SessionService {
     @Autowired
     private LiteSessionRepository liteSessionRepository;
 
-    public SessionServiceImp(){}
+    public SessionServiceImp() {
+    }
 
     @Override
     public SessionLiteDTO createSession(final SessionLiteDTO sessionDTO) {
@@ -67,5 +71,26 @@ public class SessionServiceImp implements SessionService {
             Double totalFee = (Double) row[2];
             return new PaymentDTO(mentorId, mentorName, totalFee);
         }).toList();
+    }
+
+    @Override
+    public List<SessionDTO> getAllStudentSessions(String studentClerkId) {
+        List<SessionEntity> sessions = sessionRepository.findAll();
+        return sessions.stream()
+                .filter(session -> session.getStudentEntity().getClerkStudentId().equals(studentClerkId))
+                .map(SessionDTOEntityMapper::map)
+                .toList();
+    }
+
+    @Override
+    public SessionDTO updateSessionStatus(Integer sessionId, Constants.SessionStatus sessionStatus) {
+        Optional<SessionEntity> optionalSession = sessionRepository.findById(sessionId);
+        if (optionalSession.isEmpty()) {
+            throw new IllegalArgumentException("Session with ID " + sessionId + " not found.");
+        }
+        SessionEntity sessionEntity = optionalSession.get();
+        sessionEntity.setSessionStatus(sessionStatus);
+        SessionEntity updatedEntity = sessionRepository.save(sessionEntity);
+        return SessionDTOEntityMapper.map(updatedEntity);
     }
 }
