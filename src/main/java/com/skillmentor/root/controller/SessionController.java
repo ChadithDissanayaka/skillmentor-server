@@ -37,7 +37,7 @@ public class SessionController {
                         @ApiResponse(responseCode = "503", description = "Service unavailable")
         })
 
-        @PreAuthorize(Constants.ADMIN_ROLE_PERMISSION)
+        // @PreAuthorize(Constants.ADMIN_ROLE_PERMISSION)
         @PostMapping(value = "/session", consumes = Constants.APPLICATION_JSON, produces = Constants.APPLICATION_JSON)
         public ResponseEntity<SessionLiteDTO> createSession(
                         @Parameter(description = "Session data to create", required = true) @Valid @RequestBody SessionLiteDTO sessionDTO) {
